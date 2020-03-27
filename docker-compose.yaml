@@ -33,3 +33,26 @@ services:
    - wp-vol:/var/www/html
   networks:
    - wp-net
+
+## CREATE WEBSERVER IMAGE ##
+
+ depends_on:
+  - wordpress
+  image: nginx:1.15.12-alpine
+  container_name: webserver
+  restart: unless-stopped
+  ports:
+   - "8080:80"
+  volumes:
+   - wp-vol:/var/www/html
+   - ./nginx:/etc/nginx/conf.d
+  networks:
+      - wp-net
+
+volumes:
+ wp-vol:
+ db-vol:
+
+networks:
+ wp-net:
+  driver: bridge
